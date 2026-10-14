@@ -13,6 +13,7 @@ output/<Предмет>/глоссарий.md          — общий глосс
 ```
 
 Обработка: `python transcribe.py` (или `run.bat`) обрабатывает только новые файлы; `--force` переделывает.
+Если `python` отвечает «Python was not found» (заглушка Microsoft Store в PATH) — запускать через `py`.
 Готовность лекции — наличие `transcript.md` (во время работы пишется `transcript.md.partial`).
 
 ## Как писать конспект
