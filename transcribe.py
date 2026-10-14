@@ -8,6 +8,7 @@
     python transcribe.py                 # обработать всё новое из input/
     python transcribe.py --force         # переделать уже обработанные
     python transcribe.py --no-frames     # без ключевых кадров
+    python transcribe.py geroi           # только файлы, в имени которых есть «geroi»
 """
 
 import argparse
@@ -156,6 +157,7 @@ def find_lectures() -> list[tuple[str, Path]]:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("only", nargs="*", help="обработать только файлы, в имени которых есть эта подстрока")
     ap.add_argument("--force", action="store_true", help="переобработать уже готовые лекции")
     ap.add_argument("--no-frames", action="store_true", help="не извлекать кадры из видео")
     ap.add_argument("--no-int8", action="store_true", help="полная точность модели (медленнее)")
@@ -176,6 +178,8 @@ def main() -> None:
 
     todo = []
     for subject, src in find_lectures():
+        if args.only and not any(s.lower() in src.name.lower() for s in args.only):
+            continue
         out_dir = OUTPUT / subject / src.stem
         if (out_dir / "transcript.md").exists() and not args.force:
             continue
